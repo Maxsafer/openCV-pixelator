@@ -18,7 +18,7 @@ def inputImg():
   else:
     sys.exit()
 
-def toAscii(image, bits):
+def toAscii(image, bits, w, h):
   # 255/15 = 0 a 17, 17 a 34 etc. 15 rangos de intervalos de 17
   chars = ["@","=","%","#","&","G","L","*","|","!",";",":",",","."," "]
   chars.reverse()
@@ -44,11 +44,12 @@ def toAscii(image, bits):
       elif color > 204 and color <= 221: imascii[row].append(chars[12])
       elif color > 221 and color <= 238: imascii[row].append(chars[13])
       elif color > 238 and color <= 255: imascii[row].append(chars[14])
-
+  
   for i in range(bits):
     print('')
     for j in range(bits):
-      print(imascii[i][j], end = " ")
+      for times in range(0,round(w/h)):
+        print(imascii[i][j], end = " ")
       
 def imageWriter(bits):
   input = cv2.imread(f'./images/{inputImg()}')
@@ -56,10 +57,10 @@ def imageWriter(bits):
   # Get input size
   height, width = input.shape[:2]
   
-  # Resize input to "pixelated" size (w, h)
+  # Resize input to "pixelated"
   temp = cv2.resize(input, (bits, bits), interpolation=cv2.INTER_AREA)
   
-  toAscii(temp, bits)
+  toAscii(temp, bits, width, height)
   
   # Initialize output image
   output = cv2.resize(temp, (width, height), interpolation=cv2.INTER_NEAREST)
@@ -70,5 +71,5 @@ def imageWriter(bits):
   
 if __name__ == '__main__':
   while True:
-    bits = 64
+    bits = 54
     imageWriter(bits)
