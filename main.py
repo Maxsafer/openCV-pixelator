@@ -20,7 +20,7 @@ def inputImg():
 
 def toAscii(image, bits, w, h):
   # 255/15 = 0 a 17, 17 a 34 etc. 15 rangos de intervalos de 17
-  chars = ["@","#","%","&","8","U","L","|","!",";","*",":",",","."," "]
+  chars = ["@","#","%","&","8","U","L","|","!",";","•",":",",","."," "]
   chars.reverse()
   image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
   imascii = []
