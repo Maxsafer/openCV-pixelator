@@ -5,23 +5,26 @@ import sys
 def inputImg():
   files = []
   counter = 0
+  inv = 0
   print(f'{counter}. Exit')
   for file in listdir('./images'):
     if (file.endswith(".jpg") or file.endswith(".png") or file.endswith(".jpeg")) and file != 'output.jpg':
       counter += 1
       print(f'{counter}. {file}')
       files.append(file)
-  chosen = int(input())-1
+  chosen = input()
+  if "inv" in chosen: inv = 1
+  chosen = int(chosen.replace("inv",""))-1
   if chosen != -1: 
     inputName = f'{files[chosen]}'
-    return inputName
+    return [inputName, inv]
   else:
     sys.exit()
 
-def toAscii(image, bits, w, h):
+def toAscii(image, bits, w, h, inv):
   # 255/15 = 0 a 17, 17 a 34 etc. 15 rangos de intervalos de 17
   chars = ["@","#","%","&","8","U","L","|","!",";","•",":",",","."," "]
-  chars.reverse()
+  if inv == False: chars.reverse()
   image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
   imascii = []
   
@@ -52,7 +55,8 @@ def toAscii(image, bits, w, h):
         print(imascii[i][j], end = " ")
 
 def imageWriter(bits):
-  input = cv2.imread(f'./images/{inputImg()}')
+  selectImg = inputImg()
+  input = cv2.imread(f'./images/{selectImg[0]}')
   
   # Get input size
   height, width = input.shape[:2]
@@ -60,7 +64,7 @@ def imageWriter(bits):
   # Resize input to "pixelated"
   temp = cv2.resize(input, (bits, bits), interpolation=cv2.INTER_AREA)
   
-  toAscii(temp, bits, width, height)
+  toAscii(temp, bits, width, height, selectImg[1])
   
   # Initialize output image
   output = cv2.resize(temp, (width, height), interpolation=cv2.INTER_NEAREST)
