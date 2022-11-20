@@ -27,7 +27,7 @@ def generate_empty_image(bits, constant):
 
 def toAscii(image, bits, w, h, inv):
   # 255/15 = 0 a 17, 17 a 34 etc. 15 rangos de intervalos de 17
-  chars = ["@","#","%","&","8","U","L","|","!",";","e",":",",","."," "]
+  chars = ["@","#","%","&","8","U","?","L","|","!",";",":",",","."," "]
   #•
   if inv == False: chars.reverse()
   image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
