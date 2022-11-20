@@ -1,4 +1,5 @@
 from os import listdir
+import numpy as np
 import cv2
 import sys
 
@@ -21,12 +22,17 @@ def inputImg():
   else:
     sys.exit()
 
+def generate_empty_image(bits):
+    return np.ones(shape=(bits*10,bits*10,1), dtype=np.int16)
+
 def toAscii(image, bits, w, h, inv):
   # 255/15 = 0 a 17, 17 a 34 etc. 15 rangos de intervalos de 17
   chars = ["@","#","%","&","8","U","L","|","!",";","•",":",",","."," "]
   if inv == False: chars.reverse()
   image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
   imascii = []
+
+  genimg = generate_empty_image(bits)
   
   for row in range(0, bits):
     imascii.append([])
@@ -53,7 +59,8 @@ def toAscii(image, bits, w, h, inv):
     for j in range(bits):
       for times in range(0,round(w/h)):
         print(imascii[i][j], end = " ")
-
+        cv2.putText(img=genimg, text=f'{imascii[i][j]}', org=(j * 10, (i * 10)+10), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=.3, color=(255),thickness=1)
+  cv2.imwrite('output2.jpg', genimg)
 def imageWriter(bits):
   selectImg = inputImg()
   input = cv2.imread(f'./images/{selectImg[0]}')
@@ -75,5 +82,5 @@ def imageWriter(bits):
   
 if __name__ == '__main__':
   while True:
-    bits = 54
+    bits = 64
     imageWriter(bits)
