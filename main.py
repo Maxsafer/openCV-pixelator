@@ -86,5 +86,5 @@ def imageWriter(bits):
   
 if __name__ == '__main__':
   while True:
-    bits = 256
+    bits = 64
     imageWriter(bits)
